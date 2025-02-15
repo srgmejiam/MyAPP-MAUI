@@ -1,0 +1,24 @@
+﻿@page "/Usuarios"
+
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0.5rem" class="rz-p-sm-12">
+    <RadzenLabel Text="Select Value" Component="DropDownBindValue" />
+    <RadzenDropDown @bind-Value=@value Data=@companyNames Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
+</RadzenStack>
+
+@code {
+    string value = "Around the Horn";
+    List<string> companyNames = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        companyNames.Add("Company 1");
+        companyNames.Add("Company 2");
+        companyNames.Add("Company 3");
+        companyNames.Add("Company 4");
+        companyNames.Add("Company 5");
+        await base.OnInitializedAsync();
+
+    }
+}

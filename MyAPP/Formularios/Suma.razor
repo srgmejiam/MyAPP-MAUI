@@ -1,0 +1,35 @@
+﻿@page "/Suma"
+
+<h3>Suma</h3>
+
+<Radzen.Blazor.RadzenStack Orientation="Radzen.Orientation.Horizontal">
+    <Radzen.Blazor.RadzenStack>
+        <Radzen.Blazor.RadzenLabel>Ingrese Número 1</Radzen.Blazor.RadzenLabel>
+        <Radzen.Blazor.RadzenNumeric TValue="int" @bind-Value="Numero1" class="form-control" />
+    </Radzen.Blazor.RadzenStack>
+
+    <Radzen.Blazor.RadzenStack>
+        <Radzen.Blazor.RadzenLabel>Ingrese Número 2</Radzen.Blazor.RadzenLabel>
+        <Radzen.Blazor.RadzenNumeric TValue="int" @bind-Value="Numero2" class="form-control" />
+    </Radzen.Blazor.RadzenStack>
+
+    <Radzen.Blazor.RadzenStack>
+        <Radzen.Blazor.RadzenLabel>Resultado</Radzen.Blazor.RadzenLabel>
+        <Radzen.Blazor.RadzenNumeric TValue="int" @bind-Value="Resultado" class="form-control" ReadOnly="true" />
+    </Radzen.Blazor.RadzenStack>
+
+    <Radzen.Blazor.RadzenStack>
+        <Radzen.Blazor.RadzenButton Text="Sumar" Click="Sumar" Style="margin-top:40px"/>
+    </Radzen.Blazor.RadzenStack>
+</Radzen.Blazor.RadzenStack>
+
+@code {
+    public int Numero1 { get; set; } = 0;
+    public int Numero2 { get; set; } = 0;
+    public int Resultado { get; set; } = 0;
+
+    private void Sumar()
+    {
+        Resultado = Numero1 + Numero2;
+    }
+}
