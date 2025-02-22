@@ -8,25 +8,14 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="suma">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Suma
-            </NavLink>
-        </div>
+        <RadzenPanelMenu>
+            <RadzenPanelMenuItem Text="Inicio" Path="home" Icon="home" />
+            <RadzenPanelMenuItem Text="Catalogos" Icon="Settings">
+                <RadzenPanelMenuItem Text="Textbox" Path="Textbox" Icon="Text_Fields" />
+                <RadzenPanelMenuItem Text="DropDown" Path="Dropdown" Icon="Arrow_Drop_Down" />
+
+            </RadzenPanelMenuItem>
+        </RadzenPanelMenu>
+
     </nav>
 </div>

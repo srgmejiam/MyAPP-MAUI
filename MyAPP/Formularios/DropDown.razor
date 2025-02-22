@@ -1,0 +1,57 @@
+﻿@page "/Dropdown"
+@using System.Globalization
+@using Radzen
+@using Radzen.Blazor
+
+<h3>DropDown</h3>
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0.5rem" class="rz-p-sm-12">
+    <RadzenLabel Text="Seleccione" Component="DropDownBindValue" />
+    <RadzenDropDown TValue="string" Data=@MesesList Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" TextProperty="@nameof(Mes.Nombre)" ValueProperty="@nameof(Mes.Id)" />
+</RadzenStack>
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0.5rem" class="rz-p-sm-12">
+    <RadzenLabel Text="Select Value" Component="DropDownVirtualization" />
+    <RadzenDropDown AllowClear="true" @bind-Value=value AllowVirtualization="true" Name="DropDownVirtualization"
+                    AllowFiltering="true" Data=@MesesList 
+                    TextProperty="@nameof(Mes.Nombre)" 
+                    ValueProperty="@nameof(Mes.Id)" 
+                    Style="width: 100%; max-width: 400px;" 
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"/>
+</RadzenStack>
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0.5rem" class="rz-p-12">
+    <RadzenLabel Text="Select Value" Component="DropDownDataGridBindValue" />
+    <RadzenDropDownDataGrid @bind-Value=@value Data=@MesesList Name="DropDownDataGridBindValue"
+                            TextProperty="@nameof(Mes.Nombre)"
+                            ValueProperty="@nameof(Mes.Id)"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" />
+</RadzenStack>
+@code {
+    int value =0;
+
+    List<Mes> MesesList=new();
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        MesesList.Add(new Mes { Id = 1, Nombre = "Enero" });
+        MesesList.Add(new Mes { Id = 2, Nombre = "Febrero" });
+        MesesList.Add(new Mes { Id = 3, Nombre = "Marzo" });
+        MesesList.Add(new Mes { Id = 4, Nombre = "Abril" });
+        MesesList.Add(new Mes { Id = 5, Nombre = "Mayo" });
+        MesesList.Add(new Mes { Id = 6, Nombre = "Junio" });
+        MesesList.Add(new Mes { Id = 7, Nombre = "Julio" });
+        MesesList.Add(new Mes { Id = 8, Nombre = "Agosto" });
+        MesesList.Add(new Mes { Id = 9, Nombre = "Septiembre" });
+        MesesList.Add(new Mes { Id = 10, Nombre = "Octubre" });
+        MesesList.Add(new Mes { Id = 11, Nombre = "Noviembre" });
+        MesesList.Add(new Mes { Id = 12, Nombre = "Diciembre" });
+        
+    }
+
+    public class Mes
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+    }
+}
