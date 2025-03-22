@@ -1,0 +1,135 @@
+﻿@page "/GridData"
+@using Radzen
+@using Radzen.Blazor
+@using Model
+@inject Controllers.IClienteController Controller
+
+
+<h3>Grid</h3>
+
+<RadzenDataGrid @ref="Tabla"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                AllowColumnResize="true"
+                ColumnWidth="150px"
+                Density="Density.Default"
+                PageSize="5"
+                Responsive="true"
+                EditMode="DataGridEditMode.Single"
+                Data="Data"
+                TItem="Cliente"
+                EmptyText="Sin registros para mostrar"
+                ShowPagingSummary="true"
+                PageSizeOptions=@PageSizeOptions
+                PagingSummaryFormat=@PagingSummaryFormat
+                PageSizeText="Registros por página"
+                ClearFilterText="Borrar"
+                ApplyFilterText="Aplicar"
+                FilterText="Filtro"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                FilterMode="FilterMode.Simple"
+                Page="@(a=>DisableInsert=false)"
+                PageSizeChanged="@(a=>DisableInsert=false)">
+
+    <HeaderTemplate>
+        <RadzenButton Disabled="@(!Agregar)" ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Agregar" Click="@InsertRow" />
+    </HeaderTemplate>
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(Cliente.IdCliente)" Title="ID">
+            <EditTemplate Context="Cliente">
+                <RadzenNumeric @bind-Value=Cliente.IdCliente></RadzenNumeric>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(Cliente.Nombre)" Title="Nombre">
+            <EditTemplate Context="Cliente">
+                <RadzenTextBox @bind-Value=Cliente.Nombre></RadzenTextBox>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(Cliente.Correo)" Title="Correo">
+            <EditTemplate Context="Cliente">
+                <RadzenTextBox @bind-Value=Cliente.Correo></RadzenTextBox>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(Cliente.Telefono)" Title="Telefono">
+            <EditTemplate Context="Cliente">
+                <RadzenTextBox @bind-Value=Cliente.Telefono></RadzenTextBox>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn Context="Cliente" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Title="Acciones" Frozen="true" FrozenPosition="FrozenColumnPosition.Right">
+            <Template Context="Cliente">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(a=>EditRow(Cliente))" />
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@(x=>DeleteRow(Cliente))" />
+            </Template>
+            <EditTemplate Context="Cliente">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Medium" aria-label="Save" Click="@(x=>SaveRow(Cliente))" />
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" aria-label="Cancel" Click="@(x=>CancelEdit(Cliente))" />
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Click="@(x=>DeleteRow(Cliente))" class="rz-my-1 rz-ms-1" aria-label="Delete" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+
+</RadzenDataGrid>
+
+@code {
+    public RadzenDataGrid<Cliente>? Tabla { get; set; }
+    public List<Cliente> Data { get; set; }
+    public IEnumerable<int> PageSizeOptions { get; set; } = new[] { 2, 5, 10, 100 };
+    public string PagingSummaryFormat { get; set; } = "Página {0} de {1} <b>(Total {2} Registros)</b>";
+    public bool DisableInsert { get; set; } = false;
+    public bool Agregar { get; set; } = true;
+
+    protected override Task OnInitializedAsync()
+    {
+
+        cargarGrid();
+        return base.OnInitializedAsync();
+    }
+
+    private async void cargarGrid()
+    {
+        Data = await Controller.Get();
+        StateHasChanged();
+    }
+
+    //Inserta una nueva fila vacia
+    async Task InsertRow()
+    {
+        if (Tabla != null)
+            await Tabla.InsertRow(new());
+        DisableInsert = false;
+    }
+    //Edita una fila existente
+    async Task EditRow(Cliente Entidad)
+    {
+        if (Tabla != null)
+            await Tabla.EditRow(Entidad);
+        DisableInsert = true;
+    }
+    async Task DeleteRow(Cliente Entidad)
+    {
+        if (Tabla != null)
+            // Model.DAL_Cliente.Data.Remove(Entidad);
+        await Tabla.Reload();
+        DisableInsert = true;
+    }
+    async Task SaveRow(Cliente Entidad)
+    {
+        // DAL_Cliente.Data.Add(Entidad);
+
+        cargarGrid();
+        CancelEdit(Entidad);
+
+        await Tabla.Reload();
+        await Task.Delay(1);
+        
+    }
+    async void CancelEdit(Cliente Entidad)
+    {
+        if (Tabla != null)
+            Tabla.CancelEditRow(Entidad);
+        DisableInsert = false;
+    }
+
+}

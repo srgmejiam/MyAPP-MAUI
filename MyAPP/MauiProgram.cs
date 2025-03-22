@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using MyAPP.Controllers;
 using Radzen;
 
 namespace MyAPP
@@ -14,13 +17,18 @@ namespace MyAPP
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
+            builder.Services.AddDbContextFactory<dbContext>(options =>
+    options.UseSqlServer("DefaultConnection"));
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddRadzenComponents();
+            builder.Services.AddScoped<IClienteController,ClienteController>();
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
